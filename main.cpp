@@ -1,7 +1,9 @@
 import helloworld;  // import declaration
 
 int main()
-{
+{    
     hello();
-    printline("Hello Again!");
+    gruss();
+    greet();
+    return 0;
 }

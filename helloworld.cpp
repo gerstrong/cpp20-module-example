@@ -1,16 +1,30 @@
-module;
+module; // <- Must always be declared as, so it is recognized as a module
 
+/// Includes
 #include <iostream>
-#include <string>
 
+// Modul declaration
 export module helloworld;
+export import :german;
+export import :english;
 
-export void printline(const std::string &msg)
+
+/// Imports
+
+
+/// Code which will not exported
+
+void speak()
 {
-    std::cout << msg << std::endl;
+    std::cout << "Universal: Hello World Universal!" << std::endl;
 }
 
+/// Code which will be exported
 export void hello()
 {
-    printline("Hello World!!!");
+    speak();
+
+    gruss();
+    greet();
 }
+

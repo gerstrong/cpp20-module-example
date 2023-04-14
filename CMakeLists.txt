@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(Cpp20ModulesExample LANGUAGES CXX)
+project(Cpp20Submodules LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -34,16 +34,6 @@ function(add_module name)
                         -o ${name}.pcm
                     )                
 
-#            foreach(sys_module ${SYSTEM_MODULES})
-#                file(GLOB_RECURSE fullpath "${sys_module}*" ${CMAKE_CURRENT_BINARY_DIR} )
-#                if(NOT EXISTS ${fullpath})
-#                    message("Creating the system module ${sys_module}")
-#                    execute_process(COMMAND ${CMAKE_CXX_COMPILER} -std=c++20 -fmodules-ts -xc++-system-header ${sys_module})
-#                else()
-#                    message("Found system module ${sys_module}")
-#                endif()
-#            endforeach()
-
           elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
             # using Visual Studio C++
             add_custom_target(${name}.obj
@@ -56,8 +46,13 @@ function(add_module name)
 endfunction()
 
 
-set(MODULE_SRCS helloworld.cpp)
-set(MODULES helloworld)
+set(MODULE_SRCS helloworld.cpp german.cpp english.cpp)
+
+# Create a list of only names so we add the extension for module and source respectively
+foreach(item ${MODULE_SRCS})
+    string(REPLACE ".cpp" "" new_item ${item})
+    list(APPEND MODULENAMES ${new_item})
+endforeach()
 
 add_custom_target(main_modules SOURCES ${MODULE_SRCS})
 
@@ -65,21 +60,24 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
   # Using Clang
   add_compile_options(-fprebuilt-module-path=${PREBUILT_MODULE_PATH})
 
-  add_module(helloworld ${MODULE_SRCS})
   add_executable(mainExe main.cpp ${MODULE_SRCS})
 
-  add_dependencies(main ${MODULES}.pcm)
+  foreach(THE_MODULE ${MODULENAMES})
+    add_module(${THE_MODULE} ${THE_MODULE}.cpp)
+    add_dependencies(main ${THE_MODULE}.pcm)
+  endforeach()
 
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   # Using GCC
   add_compile_options(-fmodules-ts)
-  add_module(helloworld ${MODULE_SRCS})
+
   add_executable(main main.cpp)
 
-  add_custom_target(module ${MODULE_SRCS})
-
-  target_link_options(main PUBLIC "LINKER:${MODULES}.pcm")
-  add_dependencies(main helloworld.pcm)
+  foreach(THE_MODULE ${MODULENAMES})
+    add_module(${THE_MODULE} ${THE_MODULE}.cpp)
+    target_link_options(main PUBLIC "LINKER:${THE_MODULE}.pcm")
+    add_dependencies(main ${THE_MODULE}.pcm)
+  endforeach()
 
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
   # Using Visual Studio C++
@@ -87,7 +85,6 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 
   add_module(helloworld helloworld.cpp)
   add_executable(mainExe main.cpp)
-
 
   add_dependencies(main helloworld.pcm)
 
