@@ -7,7 +7,9 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(PREBUILT_MODULE_PATH ${CMAKE_BINARY_DIR}/modules)
 
-set(SYSTEM_MODULES iostream)
+#set(SYSTEM_MODULES iostream)
+
+set(MODULE_SRCS helloworld.cpp german.cpp english.cpp)
 
 function(add_module name)
     file(MAKE_DIRECTORY ${PREBUILT_MODULE_PATH})
@@ -46,8 +48,6 @@ function(add_module name)
 endfunction()
 
 
-set(MODULE_SRCS helloworld.cpp german.cpp english.cpp)
-
 # Create a list of only names so we add the extension for module and source respectively
 foreach(item ${MODULE_SRCS})
     string(REPLACE ".cpp" "" new_item ${item})
@@ -83,10 +83,12 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
   # Using Visual Studio C++
   add_compile_options(/experimental:module /c)
 
-  add_module(helloworld helloworld.cpp)
-  add_executable(mainExe main.cpp)
+  add_executable(main main.cpp)
 
-  add_dependencies(main helloworld.pcm)
+  foreach(THE_MODULE ${MODULENAMES})
+    add_module(${THE_MODULE} ${THE_MODULE}.cpp)
+    add_dependencies(main ${THE_MODULE}.pcm)
+  endforeach()
 
 endif()
 
