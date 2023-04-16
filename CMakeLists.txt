@@ -11,7 +11,7 @@ include(cpp20modules.cmake)
 
 #set(SYSTEM_MODULES iostream)
 
-set(MODULE_SRCS helloworld.cpp german.cpp english.cpp)
+set(MODULE_SRCS helloworld.cpp german.cpp english.cpp spanish.cpp)
 
 # Create a list of only names so we add the extension for module and source respectively
 foreach(item ${MODULE_SRCS})
