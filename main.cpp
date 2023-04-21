@@ -1,12 +1,11 @@
-import helloworld;  // import declaration
 
-import helloworld.spanish;
+#include <iostream>
+
+import math;  // import declaration
 
 int main()
-{    
-    hello();
-    gruss();
-    greet();
-    saludar();
+{
+    auto res = sum(1, 2);
+    std::cout << res << std::endl;
     return 0;
 }
