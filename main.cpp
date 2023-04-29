@@ -1,11 +1,10 @@
 
 #include <iostream>
 
-import math;  // import declaration
+import helloworld;  // import declaration
 
 int main()
 {
-    auto res = sum(1, 2);
-    std::cout << res << std::endl;
+    hello();
     return 0;
 }

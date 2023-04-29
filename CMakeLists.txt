@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(cpp20-templates-modules LANGUAGES CXX)
+project(cpp20-system-modules LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -11,7 +11,7 @@ include(cpp20modules.cmake)
 
 #set(SYSTEM_MODULES iostream)
 
-set(MODULE_SRCS mathTemplate.cpp)
+set(MODULE_SRCS helloworld.cpp)
 
 # Create a list of only names so we add the extension for module and source respectively
 foreach(item ${MODULE_SRCS})
